@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Online_Store_link.Data.Context;
 
@@ -11,9 +12,10 @@ using Online_Store_link.Data.Context;
 namespace Online_Store_link.Migrations
 {
     [DbContext(typeof(OnlineStoreContext))]
-    partial class OnlineStoreContextModelSnapshot : ModelSnapshot
+    [Migration("20220702174204_v13")]
+    partial class v13
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -96,7 +98,7 @@ namespace Online_Store_link.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("CustomerClaims", (string)null);
+                    b.ToTable("AspNetUserClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -155,24 +157,6 @@ namespace Online_Store_link.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Online_Store_link.Models.DBModels.Cart", b =>
-                {
-                    b.Property<Guid?>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CustomerId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProductId", "CustomerId");
-
-                    b.HasIndex("CustomerId");
-
-                    b.ToTable("Carts");
-                });
-
             modelBuilder.Entity("Online_Store_link.Models.DBModels.Category", b =>
                 {
                     b.Property<Guid>("CategoryID")
@@ -215,12 +199,6 @@ namespace Online_Store_link.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -265,7 +243,7 @@ namespace Online_Store_link.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("Customer", (string)null);
+                    b.ToTable("Customers", (string)null);
                 });
 
             modelBuilder.Entity("Online_Store_link.Models.DBModels.Product", b =>
@@ -338,28 +316,28 @@ namespace Online_Store_link.Migrations
                     b.HasData(
                         new
                         {
-                            VendorID = new Guid("8111d9a0-d293-40c6-a698-4753d7268382"),
+                            VendorID = new Guid("bd3e000b-4c15-4b9f-b28d-692950582631"),
                             Address = "Cairo",
                             Email = "saif@saif.com",
                             Name = "Saifuddin Ibrahim"
                         },
                         new
                         {
-                            VendorID = new Guid("ccc0d0af-756e-42aa-8830-e6553f04482e"),
+                            VendorID = new Guid("396b4ca7-69df-4c91-87db-c0d89a36384f"),
                             Address = "Cairo",
                             Email = "ali@ali.com",
                             Name = "Ali Hamed"
                         },
                         new
                         {
-                            VendorID = new Guid("bff6bb3c-6f37-4ff1-8501-e9cd1e675e15"),
+                            VendorID = new Guid("ac0c8aa1-6df9-40d1-8063-d0bdd86e82cb"),
                             Address = "Cairo",
                             Email = "islam@islam.com",
                             Name = "Islam Ahmed"
                         },
                         new
                         {
-                            VendorID = new Guid("d26b2702-f276-47f9-be74-c1d22ccaae00"),
+                            VendorID = new Guid("cc62caa4-dbdb-4b2c-8815-54b061182206"),
                             Address = "Cairo",
                             Email = "khaled@khaled.com",
                             Name = "Khaled Lotfy"
@@ -415,25 +393,6 @@ namespace Online_Store_link.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Online_Store_link.Models.DBModels.Cart", b =>
-                {
-                    b.HasOne("Online_Store_link.Models.DBModels.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Online_Store_link.Models.DBModels.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Online_Store_link.Models.DBModels.Category", b =>

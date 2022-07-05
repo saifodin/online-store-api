@@ -1,20 +1,27 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Online_Store_link.Models.DBModels;
 
 namespace Online_Store_link.Data.Context;
 
-public class OnlineStoreContext: DbContext
+public class OnlineStoreContext: IdentityDbContext<Customer>
 {
     public DbSet<Product>? Products { get; set; }
     public DbSet<Category>? Categories { get; set; }
     public DbSet<Vendor>? Vendors { get; set; }
+    public DbSet<Cart>? Carts { get; set; }
 
     public OnlineStoreContext(DbContextOptions<OnlineStoreContext> options) : base(options) { }
 
-    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        #region Vendors
+
+        #region Add Composite Primary Key For Cart Table
+        modelBuilder.Entity<Cart>().HasKey(c => new { c.ProductId, c.CustomerId });
+        #endregion
+
+        #region Add Static Data Into Vendor Table
         modelBuilder.Entity<Vendor>().HasData(
             new Vendor
             {
@@ -47,50 +54,12 @@ public class OnlineStoreContext: DbContext
         );
         #endregion
 
-        #region Products
-        /*
-        modelBuilder.Entity<Product>().HasData(
-            new Product
-            {
-                ProductID = Guid.NewGuid(),
-                Name = "PlayStation",
-                ArabicName = "بلاي ستايشن",
-                Description = "playStation 5 plack color come with 2 hadles",
-                Price = 2200.5,
-                Quantity = 5,
-            },
-            new Product
-            {
-                ProductID = Guid.NewGuid(),
-                Name = "Mobile",
-                ArabicName = "بلاي ستايشن",
-                Description = "playStation 5 plack color come with 2 hadles",
-                Price = 2200.5,
-                Quantity = 5,
-            },
-            new Product
-            {
-                ProductID = Guid.NewGuid(),
-                Name = "IPhone",
-                ArabicName = "بلاي ستايشن",
-                Description = "playStation 5 plack color come with 2 hadles",
-                Price = 2200.5,
-                Quantity = 5,
-            },
-            new Product
-            {
-                ProductID = Guid.NewGuid(),
-                Name = "Tablet",
-                ArabicName = "بلاي ستايشن",
-                Description = "playStation 5 plack color come with 2 hadles",
-                Price = 2200.5,
-                Quantity = 5,
-            }
-            );
-        */
-        #endregion
-
         base.OnModelCreating(modelBuilder);
+
+        #region Rename Identity Tables
+        modelBuilder.Entity<Customer>().ToTable("Customer");
+        modelBuilder.Entity<IdentityUserClaim<string>>().ToTable("CustomerClaims");
+        #endregion
     }
 
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Online_Store_link.Data.Context;
 
@@ -11,9 +12,10 @@ using Online_Store_link.Data.Context;
 namespace Online_Store_link.Migrations
 {
     [DbContext(typeof(OnlineStoreContext))]
-    partial class OnlineStoreContextModelSnapshot : ModelSnapshot
+    [Migration("20220702185841_v18")]
+    partial class v18
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -153,24 +155,6 @@ namespace Online_Store_link.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("Online_Store_link.Models.DBModels.Cart", b =>
-                {
-                    b.Property<Guid?>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CustomerId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProductId", "CustomerId");
-
-                    b.HasIndex("CustomerId");
-
-                    b.ToTable("Carts");
                 });
 
             modelBuilder.Entity("Online_Store_link.Models.DBModels.Category", b =>
@@ -338,28 +322,28 @@ namespace Online_Store_link.Migrations
                     b.HasData(
                         new
                         {
-                            VendorID = new Guid("8111d9a0-d293-40c6-a698-4753d7268382"),
+                            VendorID = new Guid("4fc0796d-0acf-4bae-b737-8498a1f70858"),
                             Address = "Cairo",
                             Email = "saif@saif.com",
                             Name = "Saifuddin Ibrahim"
                         },
                         new
                         {
-                            VendorID = new Guid("ccc0d0af-756e-42aa-8830-e6553f04482e"),
+                            VendorID = new Guid("50bde529-719c-4def-8d76-4fcdf48cfbab"),
                             Address = "Cairo",
                             Email = "ali@ali.com",
                             Name = "Ali Hamed"
                         },
                         new
                         {
-                            VendorID = new Guid("bff6bb3c-6f37-4ff1-8501-e9cd1e675e15"),
+                            VendorID = new Guid("6dc9471d-4141-4341-a1ea-6da7f0df02f2"),
                             Address = "Cairo",
                             Email = "islam@islam.com",
                             Name = "Islam Ahmed"
                         },
                         new
                         {
-                            VendorID = new Guid("d26b2702-f276-47f9-be74-c1d22ccaae00"),
+                            VendorID = new Guid("2b534365-76f2-4998-9d35-11bb002b3bb4"),
                             Address = "Cairo",
                             Email = "khaled@khaled.com",
                             Name = "Khaled Lotfy"
@@ -415,25 +399,6 @@ namespace Online_Store_link.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Online_Store_link.Models.DBModels.Cart", b =>
-                {
-                    b.HasOne("Online_Store_link.Models.DBModels.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Online_Store_link.Models.DBModels.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Online_Store_link.Models.DBModels.Category", b =>

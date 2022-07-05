@@ -18,5 +18,7 @@ public class AutoMapperProfile: Profile
         CreateMap<CategoryWriteDTO, Category> ();
 
         CreateMap<Vendor, VendorReadDTO>();
+
+        CreateMap<Cart, CartReadDTO>();
     }
 }
