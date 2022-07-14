@@ -124,8 +124,6 @@ public class CartController : ControllerBase
         if (!isChange)
             return BadRequest("no changes, please try again");
 
-        return Ok("remove product from cart successfully");
-
         return Ok("Cart clear successfully");
     }
 
@@ -137,6 +135,13 @@ public class CartController : ControllerBase
         return unitOfWork.CartRepository.GetCoutnAndTotalPrice(customerId);
     }
 
+    [HttpGet("checkAvailability")]
+    public ActionResult<List<ProductAndQuantityDTO>> CheckProductsAvailability()
+    {
+        string customerId = userManager.FindByNameAsync(User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value).Result.Id;
+
+        return unitOfWork.CartRepository.CheckProductsAvailability(customerId);
+    }
 
 
 

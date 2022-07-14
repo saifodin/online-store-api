@@ -9,4 +9,5 @@ public interface IUnitOfWork
     IVendorRepository VendorRepository { get; } 
     ICustomerRepository CustomerRepository { get; } 
     ICartRepository CartRepository { get; } 
+    IOrderRepository OrderRepository { get; } 
 }

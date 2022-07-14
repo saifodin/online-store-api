@@ -12,4 +12,6 @@ public interface ICartRepository: IGenericRepository<Cart>
     bool AddToCartWithQuantity(string customerId, Guid productId, int quantity);
     bool ClearCart(string customerId);
     CartInfoReadDTO GetCoutnAndTotalPrice(string customerId);
+    List<ProductAndQuantityDTO> CheckProductsAvailability(string customerId);
+    List<OrderProduct> GetProductAndQuantityInCart(string customerId, Guid orderId);
 }

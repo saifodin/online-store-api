@@ -41,7 +41,7 @@ public class CustomerController : ControllerBase
         var createUserResult = await userManager.CreateAsync(newCustomer, customerRegister.Password);
         if (!createUserResult.Succeeded)
         {
-            return BadRequest(createUserResult.Errors);
+            return BadRequest(new { ErrorServer = "The email address is already in use by another account." });
         }
         #endregion
 
@@ -71,7 +71,7 @@ public class CustomerController : ControllerBase
 
         #region user Unauthorized
         if (user is null)
-            return Unauthorized( new { ErrorServer = "Wrong Email or Password" });
+            return Unauthorized( new { ErrorServer = "Sorry, we don't recognize that email or password. Please try again." });
 
 
         bool isLocked = await userManager.IsLockedOutAsync(user);
@@ -83,7 +83,7 @@ public class CustomerController : ControllerBase
         if (!isPasswordCorrect)
         {
             await userManager.AccessFailedAsync(user);
-            return Unauthorized(new { ErrorServer = "Wrong Email or Password" });
+            return Unauthorized(new { ErrorServer = "Sorry, we don't recognize that email or password. Please try again." });
         }
         #endregion
 

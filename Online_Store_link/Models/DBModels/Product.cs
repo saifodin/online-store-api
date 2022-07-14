@@ -19,12 +19,12 @@ public class Product
     public string? Description { get; set; }
 
     [Required(ErrorMessage = "Product {0} is Must")]
-    [Range(0, 100000, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
+    [Range(1, 100000, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
     [Column(TypeName = "money")]
     public double Price { get; set; }
 
     [Required(ErrorMessage = "Product {0} is Must")]
-    [Range(0, 10000, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
+    [Range(1, 10000, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
     public int Quantity { get; set; }
 
     [ForeignKey("Category")]

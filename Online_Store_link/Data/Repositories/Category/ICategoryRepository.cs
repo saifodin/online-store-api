@@ -14,4 +14,6 @@ public interface ICategoryRepository: IGenericRepository<Category>
     List<Category>? GetCategoriesPerPage(int categoriesPerPage, int pageNumber);
     List<Category>? GetCategoriesCanBeParent();
     List<Category>? GetCategoriesWithListOfProductst();
+    List<Category>? GetCategoriesWithParents(int categoriesPerPage, int pageNumber);
+    Category GetCategoryWithParentById(Guid id);
 }

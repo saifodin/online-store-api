@@ -15,10 +15,17 @@ public class AutoMapperProfile: Profile
         CreateMap<Category, CategoryReadDTO>();
         CreateMap<Category, CategoryChildReadDTO>();
         CreateMap<Category, CategoryWithProductsReadDTO>();
+        CreateMap<Category, CategoryWithParentReadDTO>();
         CreateMap<CategoryWriteDTO, Category> ();
 
         CreateMap<Vendor, VendorReadDTO>();
 
         CreateMap<Cart, CartReadDTO>();
+
+        CreateMap<OrderProduct, OrderProductReadDTO>();
+
+        CreateMap<Order, OrderReadDTO>();
+
+
     }
 }

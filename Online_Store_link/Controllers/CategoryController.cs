@@ -26,8 +26,20 @@ public class CategoryController : ControllerBase
         return mapper.Map<List<CategoryReadDTO>>(unitOfWork.CategoryRepository.GetAll());
     }
 
+    [HttpGet("withParent/{categoriesPerPage}/{pageNumber}")]
+    public ActionResult<IEnumerable<CategoryWithParentReadDTO>> GetCategoriesWithParent(int categoriesPerPage, int pageNumber)
+    {
+        var result = unitOfWork.CategoryRepository.GetCategoriesWithParents(categoriesPerPage, pageNumber);
+        if (result is null)
+            BadRequest("you entered invalid parameters");
+
+        return mapper.Map<List<CategoryWithParentReadDTO>>(result);
+
+        //return mapper.Map<List<CategoryWithParentReadDTO>>(unitOfWork.CategoryRepository.GetCategoriesWithParents(int categoriesPerPage, int pageNumber));
+    }
+
     [HttpGet("{categoriesPerPage}/{pageNumber}")]
-    public ActionResult<IEnumerable<CategoryReadDTO>> GetProducts(int categoriesPerPage, int pageNumber)
+    public ActionResult<IEnumerable<CategoryReadDTO>> GeCategoriesPePage(int categoriesPerPage, int pageNumber)
     {
         var result = unitOfWork.CategoryRepository.GetCategoriesPerPage(categoriesPerPage, pageNumber);
         if (result is null)
@@ -49,13 +61,13 @@ public class CategoryController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public ActionResult<CategoryReadDTO> GetCategoryByID(Guid id)
+    public ActionResult<CategoryWithParentReadDTO> GetCategoryByID(Guid id)
     {
-        Category? category = unitOfWork.CategoryRepository.GetById(id);
+        Category? category = unitOfWork.CategoryRepository.GetCategoryWithParentById(id);
         if (category is null)
             return NotFound("This Category not exist to get it");
 
-        return mapper.Map<CategoryReadDTO>(category);
+        return mapper.Map<CategoryWithParentReadDTO>(category);
     }
 
     [HttpGet("count")]
@@ -105,8 +117,6 @@ public class CategoryController : ControllerBase
     {
         return mapper.Map<List<CategoryReadDTO>>(unitOfWork.CategoryRepository?.GetCategoriesCanBeParent());
     }
-
-
 
     [HttpPost]
     public ActionResult PostCateogry(CategoryWriteDTO newCategory)

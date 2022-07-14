@@ -39,6 +39,20 @@ public class CategoryRepository: GenericRepository<Category>, ICategoryRepositor
         return context.Categories?.Include("Products").ToList();
     }
 
+    public List<Category>? GetCategoriesWithParents(int categoriesPerPage, int pageNumber)
+    {
+        if (categoriesPerPage < 1 || pageNumber < 1)
+            return null;
+
+        var total = GetCount();
+        int skip = categoriesPerPage * (pageNumber - 1);
+
+        if (skip >= total)
+            return null;
+
+        return context.Categories?.Include("ParentCategory").OrderBy(c => c.Name).ToList()?.Skip(skip).Take(categoriesPerPage).ToList(); ;
+    }
+
     public List<Category>? GetCategoriesCanBeParent()
     {
         return GetCategoriesWithListOfProductst()?.Where(c => c.Products?.Count == 0).ToList();
@@ -83,5 +97,9 @@ public class CategoryRepository: GenericRepository<Category>, ICategoryRepositor
         return GetCategoriesSorte()?.Skip(skip).Take(categoriesPerPage).ToList(); ;
     }
 
+    public Category GetCategoryWithParentById(Guid id)
+    {
+       return context.Categories?.Include("Products").FirstOrDefault(c => c.CategoryID == id);
+    }
 }
     

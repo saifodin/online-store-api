@@ -100,4 +100,29 @@ public class CartRepository: GenericRepository<Cart>, ICartRepository
             CartTotalPrice = cartTotalPrice,
         };      
     }
+
+    public List<ProductAndQuantityDTO> CheckProductsAvailability(string customerId)
+    {
+        List<Cart> productsInCart = context.Carts.Include("Product").Where(c => c.CustomerId == customerId).ToList();
+        List<ProductAndQuantityDTO> returnReslult = new();
+
+        foreach (var product in productsInCart)
+        {
+            if(product.Quantity > product.Product.Quantity)
+            {
+                returnReslult.Add(new ProductAndQuantityDTO((Guid)product.ProductId, product.Product.Quantity));
+                //{
+                //    ProductId = (Guid)product.ProductId,
+                //    Quantity = product.Product.Quantity
+                //});
+            }
+        }
+        return returnReslult;
+    }
+
+    public List<OrderProduct> GetProductAndQuantityInCart(string customerId, Guid orderId) 
+    {
+        return context.Carts.Where(c => c.CustomerId == customerId).Select(c => new OrderProduct() { ProductId = c.ProductId, OrderId = orderId, Quantity = c.Quantity}).ToList();
+    }
+
 }

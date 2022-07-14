@@ -11,14 +11,17 @@ public class OnlineStoreContext: IdentityDbContext<Customer>
     public DbSet<Category>? Categories { get; set; }
     public DbSet<Vendor>? Vendors { get; set; }
     public DbSet<Cart>? Carts { get; set; }
+    public DbSet<Order>? Orders { get; set; }
+    public DbSet<OrderProduct>? OrderProducts { get; set; }
 
     public OnlineStoreContext(DbContextOptions<OnlineStoreContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
 
-        #region Add Composite Primary Key For Cart Table
+        #region Add Composite Primary Key For Some Tables
         modelBuilder.Entity<Cart>().HasKey(c => new { c.ProductId, c.CustomerId });
+        modelBuilder.Entity<OrderProduct>().HasKey(o => new { o.ProductId, o.OrderId });
         #endregion
 
         #region Add Static Data Into Vendor Table
