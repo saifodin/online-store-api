@@ -5,7 +5,7 @@ using Online_Store_link.Models.DBModels;
 
 namespace Online_Store_link.Data.Context;
 
-public class OnlineStoreContext: IdentityDbContext<Customer>
+public class OnlineStoreContext: IdentityDbContext<User>
 {
     public DbSet<Product>? Products { get; set; }
     public DbSet<Category>? Categories { get; set; }
@@ -62,6 +62,9 @@ public class OnlineStoreContext: IdentityDbContext<Customer>
         #region Rename Identity Tables
         modelBuilder.Entity<Customer>().ToTable("Customer");
         modelBuilder.Entity<IdentityUserClaim<string>>().ToTable("CustomerClaims");
+
+        modelBuilder.Entity<Admin>().ToTable("Admin");
+        //modelBuilder.Entity<IdentityUserClaim<string>>().ToTable("AdminClaims");
         #endregion
     }
 

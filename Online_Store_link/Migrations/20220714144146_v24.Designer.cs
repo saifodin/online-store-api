@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Online_Store_link.Data.Context;
 
@@ -11,9 +12,10 @@ using Online_Store_link.Data.Context;
 namespace Online_Store_link.Migrations
 {
     [DbContext(typeof(OnlineStoreContext))]
-    partial class OnlineStoreContextModelSnapshot : ModelSnapshot
+    [Migration("20220714144146_v24")]
+    partial class v24
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -96,7 +98,7 @@ namespace Online_Store_link.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("CustomerClaims", (string)null);
+                    b.ToTable("AdminClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -155,6 +157,64 @@ namespace Online_Store_link.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Online_Store_link.Models.DBModels.Admin", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Admin", (string)null);
+                });
+
             modelBuilder.Entity("Online_Store_link.Models.DBModels.Cart", b =>
                 {
                     b.Property<Guid?>("ProductId")
@@ -195,6 +255,77 @@ namespace Online_Store_link.Migrations
                     b.HasIndex("ParentCategoryID");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("Online_Store_link.Models.DBModels.Customer", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("Customer", (string)null);
                 });
 
             modelBuilder.Entity("Online_Store_link.Models.DBModels.Order", b =>
@@ -303,77 +434,6 @@ namespace Online_Store_link.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Online_Store_link.Models.DBModels.User", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers", (string)null);
-                });
-
             modelBuilder.Entity("Online_Store_link.Models.DBModels.Vendor", b =>
                 {
                     b.Property<Guid>("VendorID")
@@ -399,46 +459,32 @@ namespace Online_Store_link.Migrations
                     b.HasData(
                         new
                         {
-                            VendorID = new Guid("f90f9c6a-5345-44d0-bd1e-7958169ce3f8"),
+                            VendorID = new Guid("c9eb0cac-9aad-46fe-919a-2a983ba8fb5a"),
                             Address = "Cairo",
                             Email = "saif@saif.com",
                             Name = "Saifuddin Ibrahim"
                         },
                         new
                         {
-                            VendorID = new Guid("5b8747db-8fdd-4894-9aca-5efa28ec4dcb"),
+                            VendorID = new Guid("0c49b0ae-c797-4328-9114-8b4c719ea68e"),
                             Address = "Cairo",
                             Email = "ali@ali.com",
                             Name = "Ali Hamed"
                         },
                         new
                         {
-                            VendorID = new Guid("5a831963-15e9-4189-b5f9-8fa3f0d7b871"),
+                            VendorID = new Guid("f262c21a-6d00-49eb-a1f8-1342a7c2b39c"),
                             Address = "Cairo",
                             Email = "islam@islam.com",
                             Name = "Islam Ahmed"
                         },
                         new
                         {
-                            VendorID = new Guid("d3d40276-43a2-4d0e-be4b-4c27a4a9f775"),
+                            VendorID = new Guid("b5e52d02-e482-4689-9f13-46014675b2e8"),
                             Address = "Cairo",
                             Email = "khaled@khaled.com",
                             Name = "Khaled Lotfy"
                         });
-                });
-
-            modelBuilder.Entity("Online_Store_link.Models.DBModels.Admin", b =>
-                {
-                    b.HasBaseType("Online_Store_link.Models.DBModels.User");
-
-                    b.ToTable("Admin", (string)null);
-                });
-
-            modelBuilder.Entity("Online_Store_link.Models.DBModels.Customer", b =>
-                {
-                    b.HasBaseType("Online_Store_link.Models.DBModels.User");
-
-                    b.ToTable("Customer", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -452,7 +498,7 @@ namespace Online_Store_link.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Online_Store_link.Models.DBModels.User", null)
+                    b.HasOne("Online_Store_link.Models.DBModels.Customer", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -461,7 +507,7 @@ namespace Online_Store_link.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Online_Store_link.Models.DBModels.User", null)
+                    b.HasOne("Online_Store_link.Models.DBModels.Customer", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -476,7 +522,7 @@ namespace Online_Store_link.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Online_Store_link.Models.DBModels.User", null)
+                    b.HasOne("Online_Store_link.Models.DBModels.Customer", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -485,7 +531,7 @@ namespace Online_Store_link.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Online_Store_link.Models.DBModels.User", null)
+                    b.HasOne("Online_Store_link.Models.DBModels.Customer", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -567,24 +613,6 @@ namespace Online_Store_link.Migrations
                     b.Navigation("Category");
 
                     b.Navigation("Vendor");
-                });
-
-            modelBuilder.Entity("Online_Store_link.Models.DBModels.Admin", b =>
-                {
-                    b.HasOne("Online_Store_link.Models.DBModels.User", null)
-                        .WithOne()
-                        .HasForeignKey("Online_Store_link.Models.DBModels.Admin", "Id")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Online_Store_link.Models.DBModels.Customer", b =>
-                {
-                    b.HasOne("Online_Store_link.Models.DBModels.User", null)
-                        .WithOne()
-                        .HasForeignKey("Online_Store_link.Models.DBModels.Customer", "Id")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Online_Store_link.Models.DBModels.Category", b =>

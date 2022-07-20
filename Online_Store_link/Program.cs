@@ -57,7 +57,7 @@ builder.Services.Configure<FormOptions>(o =>
 });
 #endregion
 
-#region Saif - ASP Identity Package
+#region Saif - AddIdentity - ASP Identity Package
 builder.Services.AddIdentity<Customer, IdentityRole>(options => // who's user
 {
     //password
@@ -73,6 +73,8 @@ builder.Services.AddIdentity<Customer, IdentityRole>(options => // who's user
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(2);
 
 }).AddEntityFrameworkStores<OnlineStoreContext>(); // who's context
+builder.Services.AddIdentityCore<Admin>().AddEntityFrameworkStores<OnlineStoreContext>();
+
 #endregion
 
 #region Saif - Add Middleware to Authenticate
@@ -89,8 +91,24 @@ builder.Services.AddAuthentication(options =>
         option.TokenValidationParameters = new TokenValidationParameters
         {
             IssuerSigningKey = secretKey,
-            ValidateIssuer = false,
-            ValidateAudience = false,
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidIssuer = "customer-issuer",
+            ValidAudience = "customer-audience"
+        };
+    })
+    .AddJwtBearer("adminAuth", option => //using package (microsoft.aspnetcore.authentication.jwtbearer)
+    {
+        string secretKeyString = builder.Configuration.GetValue<string>("SecretKey");
+        byte[] secretKeyBytes = Encoding.ASCII.GetBytes(secretKeyString);
+        SymmetricSecurityKey secretKey = new(secretKeyBytes);
+        option.TokenValidationParameters = new TokenValidationParameters
+        {
+            IssuerSigningKey = secretKey,
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidIssuer = "admin-issuer",
+            ValidAudience = "admin-audience"
         };
     });
 #endregion

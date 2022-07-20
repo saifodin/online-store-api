@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Online_Store_link.Data.Context;
 
@@ -11,9 +12,10 @@ using Online_Store_link.Data.Context;
 namespace Online_Store_link.Migrations
 {
     [DbContext(typeof(OnlineStoreContext))]
-    partial class OnlineStoreContextModelSnapshot : ModelSnapshot
+    [Migration("20220715142030_v27")]
+    partial class v27
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -399,28 +401,28 @@ namespace Online_Store_link.Migrations
                     b.HasData(
                         new
                         {
-                            VendorID = new Guid("f90f9c6a-5345-44d0-bd1e-7958169ce3f8"),
+                            VendorID = new Guid("33a23350-4d3d-47e0-803a-4e386867760b"),
                             Address = "Cairo",
                             Email = "saif@saif.com",
                             Name = "Saifuddin Ibrahim"
                         },
                         new
                         {
-                            VendorID = new Guid("5b8747db-8fdd-4894-9aca-5efa28ec4dcb"),
+                            VendorID = new Guid("872b198a-ab4f-4c07-92fd-6454645af492"),
                             Address = "Cairo",
                             Email = "ali@ali.com",
                             Name = "Ali Hamed"
                         },
                         new
                         {
-                            VendorID = new Guid("5a831963-15e9-4189-b5f9-8fa3f0d7b871"),
+                            VendorID = new Guid("d1324448-e2f3-4692-b8f8-d9c6575eda09"),
                             Address = "Cairo",
                             Email = "islam@islam.com",
                             Name = "Islam Ahmed"
                         },
                         new
                         {
-                            VendorID = new Guid("d3d40276-43a2-4d0e-be4b-4c27a4a9f775"),
+                            VendorID = new Guid("033ec784-e0f2-4de0-bd97-91d040152d03"),
                             Address = "Cairo",
                             Email = "khaled@khaled.com",
                             Name = "Khaled Lotfy"

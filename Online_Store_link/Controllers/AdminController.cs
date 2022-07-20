@@ -13,32 +13,33 @@ namespace Online_Store_link.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class CustomerController : ControllerBase
+public class AdminController : ControllerBase
 {
     private readonly IConfiguration configuration;
-    private readonly UserManager<Customer> userManager;
+    private readonly UserManager<Admin> userManager;
 
 
-    public CustomerController(IConfiguration configuration, UserManager<Customer> userManager)
+    public AdminController(IConfiguration configuration, UserManager<Admin> userManager)
     {
         this.configuration = configuration;
         this.userManager = userManager;
     }
 
+
     [HttpPost]
     [Route("Register")]
-    public async Task<ActionResult> RegisterCustomer(CustomerRegisterDTO customerRegister)
+    public async Task<ActionResult> RegisterAdmin()
     {
         #region CreateUser
-        var newCustomer = new Customer
+        var newAdmin = new Admin
         {
-            UserName = customerRegister.Email,
-            Email = customerRegister.Email,
-            FirstName = customerRegister.FirstName,
-            LastName = customerRegister.LastName
+            UserName = "admin@admin.com",
+            Email = "admin@admin.com",
+            FirstName = "Islam",
+            LastName = "Adel"
         };
 
-        var createUserResult = await userManager.CreateAsync(newCustomer, customerRegister.Password);
+        var createUserResult = await userManager.CreateAsync(newAdmin, "admin@admin.com");
         if (!createUserResult.Succeeded)
         {
             return BadRequest(new { ErrorServer = "The email address is already in use by another account." });
@@ -46,17 +47,17 @@ public class CustomerController : ControllerBase
         #endregion
 
         #region CreateClaims
-        var createClaimsResult = await userManager.AddClaimsAsync(newCustomer, new List<Claim>
+        var createClaimsResult = await userManager.AddClaimsAsync(newAdmin, new List<Claim>
         {
-            new Claim (ClaimTypes.NameIdentifier, newCustomer.UserName),
-            new Claim(ClaimTypes.Email, newCustomer.Email),
-            new Claim("FirstName", newCustomer.FirstName),
-            new Claim("LastName", newCustomer.LastName)
+            new Claim (ClaimTypes.NameIdentifier, newAdmin.UserName),
+            new Claim(ClaimTypes.Email, newAdmin.Email),
+            new Claim("FirstName", newAdmin.FirstName),
+            new Claim("LastName", newAdmin.LastName)
         });
         if (!createClaimsResult.Succeeded)
         {
-            await userManager.DeleteAsync(newCustomer);
-            return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorServer= "Server Error Please Tray Later" });
+            await userManager.DeleteAsync(newAdmin);
+            return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorServer = "Server Error Please Tray Later" });
         }
         #endregion
 
@@ -67,11 +68,11 @@ public class CustomerController : ControllerBase
     [Route("login")]
     public async Task<ActionResult<TokenDTO>> Login(LoginDTO loginDTO)
     {
-        Customer user = await userManager.FindByNameAsync(loginDTO.UserName);
+        Admin user = await userManager.FindByNameAsync(loginDTO.UserName);
 
         #region user Unauthorized
         if (user is null)
-            return Unauthorized( new { ErrorServer = "Sorry, we don't recognize that email or password. Please try again." });
+            return Unauthorized(new { ErrorServer = "Sorry, we don't recognize that email or password. Please try again." });
 
 
         bool isLocked = await userManager.IsLockedOutAsync(user);
@@ -107,10 +108,10 @@ public class CustomerController : ControllerBase
             claims: userClaims,
             signingCredentials: secretKeyAndAlgorithm,
             notBefore: DateTime.Now,
-            expires: DateTime.Now.AddDays(1),
             //expires: DateTime.Now.AddSeconds(15),
-            issuer: "customer-issuer",
-            audience: "customer-audience"
+            expires: DateTime.Now.AddDays(1),
+            issuer: "admin-issuer",
+            audience: "admin-audience"
             );
         string token = new JwtSecurityTokenHandler().WriteToken(tokenObj);
 
@@ -120,21 +121,17 @@ public class CustomerController : ControllerBase
         {
             Token = token,
             ExpiryDate = tokenObj.ValidTo,
-            UserType = "Customer"
+            UserType = "Admin"
         };
     }
 
     [HttpGet]
     [Route("data")]
-    [Authorize]
+    [Authorize(AuthenticationSchemes = "adminAuth")]
     public ActionResult Get()
     {
         var customer = userManager.FindByNameAsync(User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
-        return Ok(new { Customer = customer, CustomerId = customer.Result.Id});
+        return Ok(new { Customer = customer, CustomerId = customer.Result.Id });
     }
-
-
-
-
 
 }

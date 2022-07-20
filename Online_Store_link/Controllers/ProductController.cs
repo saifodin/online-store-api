@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Online_Store_link.Data.UnitOfWork;
 using Online_Store_link.Models.DBModels;
 using Online_Store_link.Models.DTOs;
+using System.Net;
 using System.Net.Http.Headers;
 
 namespace Online_Store_link.Controllers;
@@ -24,11 +26,13 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(AuthenticationSchemes = "myAuth")]
     public ActionResult<IEnumerable<ProductReadDTO>> GetProducts()
     {
         return mapper.Map<List<ProductReadDTO>>(unitOfWork.ProductRepository.GetProductsFullInfromation());
     }
 
+    [Authorize(AuthenticationSchemes = "adminAuth")]
     [HttpGet("{prductsPerPage}/{pageNumber}")]
     public ActionResult<IEnumerable<ProductReadDTO>> GetProducts(int prductsPerPage,int pageNumber)
     {
@@ -39,12 +43,15 @@ public class ProductController : ControllerBase
         return mapper.Map<List<ProductReadDTO>>(result);
     }
 
+    [Authorize(AuthenticationSchemes = "adminAuth")]
     [HttpGet("count")]
     public ActionResult<int> GetCountOfProducts()
     {
         return unitOfWork.ProductRepository.GetCount();
     }
 
+    [Authorize(AuthenticationSchemes = "adminAuth")]
+    [Authorize(AuthenticationSchemes = "myAuth")]
     [HttpGet("{id}")]
     public ActionResult<ProductReadDTO> GetProductById(Guid id)
     {
@@ -56,6 +63,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(AuthenticationSchemes = "adminAuth")]
     public ActionResult PutProduct(Guid id, ProductWriteDTO updatedProduct)
     {
         if (updatedProduct.ProductID != id)
@@ -84,6 +92,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(AuthenticationSchemes = "adminAuth")]
     public ActionResult PostProduct(ProductWriteDTO newProduct)
     {
         if (!unitOfWork.VendorRepository.IsFound((Guid)newProduct.VendorID))
@@ -105,6 +114,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost("image")]
+    [Authorize(AuthenticationSchemes = "adminAuth")]
     public ActionResult UploadImage()
     {
         try
@@ -143,6 +153,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpDelete("image/{fileName}")]
+    [Authorize(AuthenticationSchemes = "adminAuth")]
     public ActionResult DeleteImage(string fileName)
     {
         var folderName = Path.Combine("Resources", "Images");
@@ -157,6 +168,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(AuthenticationSchemes = "adminAuth")]
     public ActionResult DeleteProduct(Guid id)
     {
         bool isDeleted = unitOfWork.ProductRepository.Delete(id);
@@ -169,6 +181,8 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet("category/{id}")]
+    [Authorize(AuthenticationSchemes = "adminAuth")]
+    [Authorize(AuthenticationSchemes = "myAuth")]
     public ActionResult<IEnumerable<ProductReadDTO>> GetProductsByCategoryId(Guid id)
     {
         if (!unitOfWork.CategoryRepository.IsLeaf(id))
