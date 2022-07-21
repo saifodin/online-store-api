@@ -8,4 +8,5 @@ public interface IProductRepository: IGenericRepository<Product>
     List<Product>? GetProductsFullInfromation();
     List<Product>? GetProductsPerPage(int productsPerPage, int pageNumber);
     Product? GetProductById(Guid id);
+    List<Product> GetProductsByName(string name);
 }

@@ -30,6 +30,11 @@ public class ProductRepository : GenericRepository<Product>, IProductRepository
         return context.Products?.Include("Category").Include("Vendor").FirstOrDefault(p => p.ProductID == id);
     }
 
+    public List<Product> GetProductsByName(string name)
+    {
+        return context.Products.Where(p => p.Name.ToLower().Contains(name.Trim().ToLower())).ToList();
+    }
+
     public List<Product>? GetProductsPerPage(int productsPerPage, int pageNumber)
     {
         if (productsPerPage < 1 || pageNumber < 1)

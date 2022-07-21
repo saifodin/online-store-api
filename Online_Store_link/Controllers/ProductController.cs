@@ -192,6 +192,14 @@ public class ProductController : ControllerBase
         return mapper.Map<List<ProductReadDTO>>(productsInThisCategory);
     }
 
+    [HttpGet("getByName/{ownerName}")]
+    public ActionResult<IEnumerable<ProductReadDTO>> SearchByName(string ownerName)
+    {
+        if (string.IsNullOrWhiteSpace(ownerName))
+            return Ok();
+        return mapper.Map<List<ProductReadDTO>>(unitOfWork.ProductRepository.GetProductsByName(ownerName));
+    }
+
     private ActionResult? CheckCategory(Guid? id)
     {
         if (id is not null && !unitOfWork.CategoryRepository.IsFound((Guid)id))

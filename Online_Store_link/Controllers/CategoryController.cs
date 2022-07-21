@@ -53,7 +53,7 @@ public class CategoryController : ControllerBase
     {
         return mapper.Map<List<CategoryReadDTO>>(unitOfWork.CategoryRepository.GetDirectChildCategories(id));
     }
-   
+
     [HttpGet("parents")]
     public ActionResult<IEnumerable<CategoryReadDTO>> GetParentCategories()
     {
@@ -104,6 +104,12 @@ public class CategoryController : ControllerBase
     public ActionResult<IEnumerable<CategoryChildReadDTO>> GetLeafCategories()
     {
         return mapper.Map<List<CategoryChildReadDTO>>(unitOfWork.CategoryRepository.GetLeafCategories());
+    }
+
+    [HttpGet("whichHaveProduct")]
+    public ActionResult<IEnumerable<CategoryReadDTO>> GetCategoriesWhichHaveProduct()
+    {
+        return mapper.Map<List<CategoryReadDTO>>(unitOfWork.CategoryRepository.GetCategoriesWhichHaveProduct());
     }
 
     [HttpGet("withProducts")]

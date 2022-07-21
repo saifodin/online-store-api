@@ -101,5 +101,10 @@ public class CategoryRepository: GenericRepository<Category>, ICategoryRepositor
     {
        return context.Categories?.Include("Products").FirstOrDefault(c => c.CategoryID == id);
     }
+
+    public List<Category> GetCategoriesWhichHaveProduct()
+    {
+        return context.Categories?.Where(c => c.Products.Count > 0).ToList();
+    }
 }
     
